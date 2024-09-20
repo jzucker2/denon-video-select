@@ -19,11 +19,11 @@ please look at the [User Guide in the Cookiecutter documentation](https://cookie
 
 **This component will set up the following platforms.**
 
-| Platform        | Description                                                               |
-| --------------- | ------------------------------------------------------------------------- |
-| `binary_sensor` | Show something `True` or `False`.                                         |
+| Platform        | Description                            |
+| --------------- | -------------------------------------- |
+| `binary_sensor` | Show something `True` or `False`.      |
 | `sensor`        | Show info from Denon Video Select API. |
-| `switch`        | Switch something `True` or `False`.                                       |
+| `switch`        | Switch something `True` or `False`.    |
 
 ![example][exampleimg]
 
@@ -94,3 +94,7 @@ Code template was mainly taken from [@Ludeeus](https://github.com/ludeeus)'s [in
 [releases-shield]: https://img.shields.io/github/release/jzucker2/denon-video-select.svg?style=for-the-badge
 [releases]: https://github.com/jzucker2/denon-video-select/releases
 [user_profile]: https://github.com/jzucker2
+
+## Notes
+
+- https://github.com/home-assistant/core/blob/dev/homeassistant/components/denonavr/media_player.py

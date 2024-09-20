@@ -1,23 +1,13 @@
 """Test Denon Video Select switch."""
-from unittest.mock import call
-from unittest.mock import patch
 
-from custom_components.denon_video_select import (
-    async_setup_entry,
-)
-from custom_components.denon_video_select.const import (
-    DEFAULT_NAME,
-)
-from custom_components.denon_video_select.const import (
-    DOMAIN,
-)
-from custom_components.denon_video_select.const import (
-    SWITCH,
-)
-from homeassistant.components.switch import SERVICE_TURN_OFF
-from homeassistant.components.switch import SERVICE_TURN_ON
+from unittest.mock import call, patch
+
+from homeassistant.components.switch import SERVICE_TURN_OFF, SERVICE_TURN_ON
 from homeassistant.const import ATTR_ENTITY_ID
 from pytest_homeassistant_custom_component.common import MockConfigEntry
+
+from custom_components.denon_video_select import async_setup_entry
+from custom_components.denon_video_select.const import DEFAULT_NAME, DOMAIN, SWITCH
 
 from .const import MOCK_CONFIG
 

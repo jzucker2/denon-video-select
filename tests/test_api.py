@@ -1,11 +1,11 @@
 """Tests for Denon Video Select api."""
+
 import asyncio
 
 import aiohttp
-from custom_components.denon_video_select.api import (
-    DenonVideoSelectApiClient,
-)
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+
+from custom_components.denon_video_select.api import DenonVideoSelectApiClient
 
 
 async def test_api(hass, aioclient_mock, caplog):
