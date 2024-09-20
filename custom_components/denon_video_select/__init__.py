@@ -8,6 +8,7 @@ https://github.com/jzucker2/denon-video-select
 from dataclasses import dataclass
 import logging
 
+from homeassistant.components.denonavr import DOMAIN as DENON_DOMAIN
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_NAME
 from homeassistant.core import Config, HomeAssistant
@@ -28,6 +29,13 @@ type DenonVideoSelectConfigEntry = ConfigEntry[DenonVideoSelectData]
 class DenonVideoSelectData:
     name: str
     main_receiver: str
+
+    @classmethod
+    def _get_denon_domain_data(cls, hass):
+        # TODO: maybe protect against no data?
+        denon_domain_data = hass.data[DENON_DOMAIN]
+        _LOGGER.debug("denon_domain_data: %s", denon_domain_data)
+        return denon_domain_data
 
     @classmethod
     def from_entry(cls, entry: DenonVideoSelectConfigEntry):
@@ -54,6 +62,14 @@ async def async_setup_entry(
     """Set up this integration using UI."""
     # if entry.runtime_data is None:
     #     _LOGGER.info(STARTUP_MESSAGE)
+
+    denon_domain_data = DenonVideoSelectData._get_denon_domain_data(hass)
+    _LOGGER.debug(
+        "async_setup_entry entry: %s for denon_domain_data: %s with entry.data: %s",
+        entry,
+        denon_domain_data,
+        entry.data,
+    )
 
     # Assign the runtime_data
     entry.runtime_data = DenonVideoSelectData.from_entry(entry)
