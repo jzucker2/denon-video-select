@@ -3,7 +3,7 @@
   "name": "Denon Video Select",
   "codeowners": ["@jzucker2"],
   "config_flow": true,
-  "dependencies": [],
+  "dependencies": ["denonavr"],
   "documentation": "https://github.com/jzucker2/denon-video-select",
   "integration_type": "hub",
   "iot_class": "local_push",
