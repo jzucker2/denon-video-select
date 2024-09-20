@@ -11,7 +11,6 @@ from custom_components.denon_video_select.const import (
     DOMAIN,
     PLATFORMS,
     SENSOR,
-    SWITCH,
 )
 
 from .const import MOCK_CONFIG
@@ -33,10 +32,10 @@ def bypass_setup_fixture():
         yield
 
 
-# Here we simiulate a successful config flow from the backend.
+# Here we simulate a successful config flow from the backend.
 # Note that we use the `bypass_get_data` fixture here because
 # we want the config flow validation to succeed during the test.
-async def test_successful_config_flow(hass, bypass_get_data):
+async def test_successful_config_flow(hass):
     """Test a successful config flow."""
     # Initialize a config flow
     result = await hass.config_entries.flow.async_init(
@@ -56,7 +55,7 @@ async def test_successful_config_flow(hass, bypass_get_data):
     # Check that the config flow is complete and a new entry is created with
     # the input data
     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
-    assert result["title"] == "test_username"
+    assert result["title"] == "test_name"
     assert result["data"] == MOCK_CONFIG
     assert result["result"]
 
@@ -65,7 +64,7 @@ async def test_successful_config_flow(hass, bypass_get_data):
 # We use the `error_on_get_data` mock instead of `bypass_get_data`
 # (note the function parameters) to raise an Exception during
 # validation of the input config.
-async def test_failed_config_flow(hass, error_on_get_data):
+async def test_failed_config_flow(hass):
     """Test a failed config flow due to credential validation failure."""
 
     result = await hass.config_entries.flow.async_init(
@@ -107,7 +106,7 @@ async def test_options_flow(hass):
 
     # Verify that the flow finishes
     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
-    assert result["title"] == "test_username"
+    assert result["title"] == "test_name"
 
     # Verify that the options were updated
-    assert entry.options == {BINARY_SENSOR: True, SENSOR: False, SWITCH: True}
+    assert entry.options == {BINARY_SENSOR: True, SENSOR: False}

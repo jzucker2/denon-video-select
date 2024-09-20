@@ -1,4 +1,4 @@
-"""Test Multi Zone Receiver setup process."""
+"""Test Denon Video Select setup process."""
 
 from homeassistant.exceptions import ConfigEntryNotReady
 import pytest
