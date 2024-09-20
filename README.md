@@ -94,3 +94,7 @@ Code template was mainly taken from [@Ludeeus](https://github.com/ludeeus)'s [in
 [releases-shield]: https://img.shields.io/github/release/jzucker2/denon-video-select.svg?style=for-the-badge
 [releases]: https://github.com/jzucker2/denon-video-select/releases
 [user_profile]: https://github.com/jzucker2
+
+## Notes
+
+- https://github.com/home-assistant/core/blob/dev/homeassistant/components/denonavr/media_player.py
