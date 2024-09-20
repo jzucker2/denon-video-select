@@ -11,7 +11,6 @@ from custom_components.denon_video_select.const import (
     DOMAIN,
     PLATFORMS,
     SENSOR,
-    SWITCH,
 )
 
 from .const import MOCK_CONFIG
@@ -110,4 +109,4 @@ async def test_options_flow(hass):
     assert result["title"] == "test_username"
 
     # Verify that the options were updated
-    assert entry.options == {BINARY_SENSOR: True, SENSOR: False, SWITCH: True}
+    assert entry.options == {BINARY_SENSOR: True, SENSOR: False}
