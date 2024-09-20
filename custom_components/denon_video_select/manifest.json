@@ -1,10 +1,13 @@
 {
   "domain": "denon_video_select",
   "name": "Denon Video Select",
-  "documentation": "https://github.com/jzucker2/denon-video-select",
-  "issue_tracker": "https://github.com/jzucker2/denon-video-select/issues",
-  "dependencies": [],
-  "config_flow": true,
   "codeowners": ["@jzucker2"],
-  "requirements": []
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/jzucker2/denon-video-select",
+  "integration_type": "hub",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/jzucker2/denon-video-select/issues",
+  "requirements": [],
+  "version": "0.2.0"
 }
