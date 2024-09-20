@@ -1,0 +1,13 @@
+{
+  "_checkout": "2021.1.1",
+  "_output_dir": "/Users/jordanz/Documents/Coding/home_assistant_custom_components/cookiecutter",
+  "_repo_dir": "/Users/jordanz/.cookiecutters/cookiecutter-homeassistant-custom-component",
+  "_template": "gh:oncleben31/cookiecutter-homeassistant-custom-component",
+  "class_name_prefix": "DenonVideoSelect",
+  "domain_name": "denon_video_select",
+  "friendly_name": "Denon Video Select",
+  "github_user": "jzucker2",
+  "project_name": "denon-video-select",
+  "test_suite": "yes",
+  "version": "0.1.0"
+}

@@ -1,0 +1,10 @@
+{
+  "domain": "denon_video_select",
+  "name": "Denon Video Select",
+  "documentation": "https://github.com/jzucker2/denon-video-select",
+  "issue_tracker": "https://github.com/jzucker2/denon-video-select/issues",
+  "dependencies": [],
+  "config_flow": true,
+  "codeowners": ["@jzucker2"],
+  "requirements": []
+}
