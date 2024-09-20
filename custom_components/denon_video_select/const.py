@@ -3,8 +3,7 @@
 # Base component constants
 NAME = "Denon Video Select"
 DOMAIN = "denon_video_select"
-DOMAIN_DATA = f"{DOMAIN}_data"
-VERSION = "0.3.0"
+VERSION = "0.4.0"
 
 ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
 ISSUE_URL = "https://github.com/jzucker2/denon-video-select/issues"
