@@ -1,0 +1,26 @@
+reload:
+  name: Reload
+  description: Reload all denon video select entities.
+
+select_video_source:
+  name: Select video source
+  description: Set the video source for a receiver.
+  target:
+  fields:
+    # Key of the field
+    source:
+      name: Source
+      description: The source to select.
+      # Whether or not field is required (default = false)
+      required: true
+      # Advanced fields are only shown when the advanced mode is enabled for the user
+      # (default = false)
+      advanced: false
+      # Example value that can be passed for this field
+      example: "Phono"
+      # The default field value
+      default: "Phono"
+      # Selector (https://www.home-assistant.io/docs/blueprint/selectors/) to control
+      # the input UI for this field
+      selector:
+        text:
