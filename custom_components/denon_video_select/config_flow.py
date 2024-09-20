@@ -1,11 +1,10 @@
 """Adds config flow for Denon Video Select."""
 
+import asyncio
 from homeassistant import config_entries
 from homeassistant.core import callback
-from homeassistant.helpers.aiohttp_client import async_create_clientsession
 import voluptuous as vol
 
-from .api import DenonVideoSelectApiClient
 from .const import CONF_PASSWORD, CONF_USERNAME, DOMAIN, PLATFORMS
 
 
@@ -59,10 +58,8 @@ class DenonVideoSelectFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def _test_credentials(self, username, password):
         """Return true if credentials is valid."""
+        await asyncio.sleep(0)
         try:
-            session = async_create_clientsession(self.hass)
-            client = DenonVideoSelectApiClient(username, password, session)
-            await client.async_get_data()
             return True
         except Exception:  # pylint: disable=broad-except
             pass

@@ -1,26 +1,45 @@
 """
-Custom integration to integrate Denon Video Select with Home Assistant.
+Custom integration to integrate Multi Zone Receiver with Home Assistant.
 
 For more details about this integration, please refer to
-https://github.com/jzucker2/denon-video-select
+https://github.com/jzucker2/multi-zone-receiver
 """
 
-import asyncio
-from datetime import timedelta
+from dataclasses import dataclass
 import logging
 
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import CONF_NAME
 from homeassistant.core import Config, HomeAssistant
-from homeassistant.exceptions import ConfigEntryNotReady
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers.reload import async_setup_reload_service
 
-from .api import DenonVideoSelectApiClient
-from .const import CONF_PASSWORD, CONF_USERNAME, DOMAIN, PLATFORMS, STARTUP_MESSAGE
+from .const import (
+    DOMAIN,
+    PLATFORMS,
+)
 
-SCAN_INTERVAL = timedelta(seconds=30)
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
+
+# The type alias needs to be suffixed with 'ConfigEntry'
+type DenonVideoSelectConfigEntry = ConfigEntry[DenonVideoSelectData]
+
+
+@dataclass
+class DenonVideoSelectData:
+    name: str
+
+    @classmethod
+    def from_entry(cls, entry: DenonVideoSelectConfigEntry):
+        _LOGGER.debug(
+            "Processing data config entry: %s with entry.data: %s", entry, entry.data
+        )
+        name = entry.data.get(CONF_NAME)
+        return cls(
+            name=name,
+        )
 
 
 async def async_setup(hass: HomeAssistant, config: Config):
@@ -28,78 +47,44 @@ async def async_setup(hass: HomeAssistant, config: Config):
     return True
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
+async def async_setup_entry(
+    hass: HomeAssistant,
+    entry: DenonVideoSelectConfigEntry,
+):
     """Set up this integration using UI."""
-    if hass.data.get(DOMAIN) is None:
-        hass.data.setdefault(DOMAIN, {})
-        _LOGGER.info(STARTUP_MESSAGE)
+    # if entry.runtime_data is None:
+    #     _LOGGER.info(STARTUP_MESSAGE)
 
-    username = entry.data.get(CONF_USERNAME)
-    password = entry.data.get(CONF_PASSWORD)
+    # Assign the runtime_data
+    entry.runtime_data = DenonVideoSelectData.from_entry(entry)
 
-    session = async_get_clientsession(hass)
-    client = DenonVideoSelectApiClient(username, password, session)
+    await async_setup_reload_service(hass, DOMAIN, PLATFORMS)
 
-    coordinator = DenonVideoSelectDataUpdateCoordinator(hass, client=client)
-    await coordinator.async_refresh()
+    # Set up all platforms for this device/entry.
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
-    if not coordinator.last_update_success:
-        raise ConfigEntryNotReady
+    # Reload entry when its updated.
+    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
-    hass.data[DOMAIN][entry.entry_id] = coordinator
-
-    for platform in PLATFORMS:
-        if entry.options.get(platform, True):
-            coordinator.platforms.append(platform)
-            hass.async_add_job(
-                hass.config_entries.async_forward_entry_setup(entry, platform)
-            )
-
-    entry.add_update_listener(async_reload_entry)
     return True
 
 
-class DenonVideoSelectDataUpdateCoordinator(DataUpdateCoordinator):
-    """Class to manage fetching data from the API."""
-
-    def __init__(
-        self,
-        hass: HomeAssistant,
-        client: DenonVideoSelectApiClient,
-    ) -> None:
-        """Initialize."""
-        self.api = client
-        self.platforms = []
-
-        super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
-
-    async def _async_update_data(self):
-        """Update data via library."""
-        try:
-            return await self.api.async_get_data()
-        except Exception as exception:
-            raise UpdateFailed() from exception
-
-
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_unload_entry(
+    hass: HomeAssistant,
+    entry: DenonVideoSelectConfigEntry,
+) -> bool:
     """Handle removal of an entry."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
-    unloaded = all(
-        await asyncio.gather(
-            *[
-                hass.config_entries.async_forward_entry_unload(entry, platform)
-                for platform in PLATFORMS
-                if platform in coordinator.platforms
-            ]
+    if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
+        _LOGGER.debug(
+            "Unloading platforms entry: %s with unload_ok: %s", entry, unload_ok
         )
-    )
-    if unloaded:
-        hass.data[DOMAIN].pop(entry.entry_id)
 
-    return unloaded
+    return unload_ok
 
 
-async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+async def async_reload_entry(
+    hass: HomeAssistant,
+    entry: DenonVideoSelectConfigEntry,
+) -> None:
     """Reload config entry."""
-    await async_unload_entry(hass, entry)
-    await async_setup_entry(hass, entry)
+    await hass.config_entries.async_reload(entry.entry_id)
