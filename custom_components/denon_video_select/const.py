@@ -18,6 +18,7 @@ BINARY_SENSOR_DEVICE_CLASS = "connectivity"
 # Platforms
 BINARY_SENSOR = "binary_sensor"
 SENSOR = "sensor"
+MEDIA_PLAYER = "media_player"
 PLATFORMS = [BINARY_SENSOR, SENSOR]
 
 
@@ -25,6 +26,7 @@ PLATFORMS = [BINARY_SENSOR, SENSOR]
 CONF_ENABLED = "enabled"
 CONF_USERNAME = "username"
 CONF_PASSWORD = "password"
+CONF_MAIN_RECEIVER = "main_receiver"
 
 # Defaults
 DEFAULT_NAME = DOMAIN
