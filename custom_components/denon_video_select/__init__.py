@@ -1,8 +1,8 @@
 """
-Custom integration to integrate Multi Zone Receiver with Home Assistant.
+Custom integration to integrate Denon Video Select with Home Assistant.
 
 For more details about this integration, please refer to
-https://github.com/jzucker2/multi-zone-receiver
+https://github.com/jzucker2/denon-video-select
 """
 
 from dataclasses import dataclass
