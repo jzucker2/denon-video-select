@@ -20,6 +20,9 @@ SENSOR = "sensor"
 MEDIA_PLAYER = "media_player"
 PLATFORMS = [BINARY_SENSOR, SENSOR]
 
+# Services
+SERVICE_SELECT_VIDEO_SOURCE = "select_video_source"
+
 
 # Configuration and options
 CONF_ENABLED = "enabled"
