@@ -7,8 +7,9 @@ https://github.com/jzucker2/denon-video-select
 
 from dataclasses import dataclass
 import logging
+from typing import Any
 
-from homeassistant.components.denonavr import DOMAIN as DENON_DOMAIN
+from homeassistant.components.denonavr import CONF_RECEIVER, DOMAIN as DENON_DOMAIN
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_NAME
 from homeassistant.core import Config, HomeAssistant
@@ -25,10 +26,19 @@ _LOGGER: logging.Logger = logging.getLogger(__package__)
 type DenonVideoSelectConfigEntry = ConfigEntry[DenonVideoSelectData]
 
 
+class DenonVideoSelectDataException(Exception):
+    pass
+
+
+class MissingDenonConfigEntryException(DenonVideoSelectDataException):
+    pass
+
+
 @dataclass
 class DenonVideoSelectData:
     name: str
-    main_receiver: str
+    main_receiver_entity: str
+    main_receiver: Any
 
     @classmethod
     def _get_denon_domain_data(cls, hass):
@@ -38,14 +48,36 @@ class DenonVideoSelectData:
         return denon_domain_data
 
     @classmethod
-    def from_entry(cls, entry: DenonVideoSelectConfigEntry):
+    def _get_first_denon_config_entry(cls, hass):
+        denon_data = cls._get_denon_domain_data(hass)
+        if not denon_data:
+            e_m = "Missing denon data"
+            _LOGGER.error(e_m)
+            raise MissingDenonConfigEntryException(e_m)
+        config_entry = denon_data[0]
+        _LOGGER.debug("config_entry: %s", config_entry)
+        return config_entry
+
+    @classmethod
+    def _get_first_denon_receiver(cls, hass):
+        config_entry = cls._get_first_denon_config_entry(hass)
+        receiver = config_entry[CONF_RECEIVER]
+        _LOGGER.debug("receiver: %s", receiver)
+        return receiver
+
+    @classmethod
+    def from_entry(cls, hass, entry: DenonVideoSelectConfigEntry):
         _LOGGER.debug(
             "Processing data config entry: %s with entry.data: %s", entry, entry.data
         )
         name = entry.data.get(CONF_NAME)
-        main_receiver = entry.data.get(CONF_MAIN_RECEIVER)
+        main_receiver_entity = entry.data.get(CONF_MAIN_RECEIVER)
+
+        main_receiver = cls._get_first_denon_receiver(hass)
+
         return cls(
             name=name,
+            main_receiver_entity=main_receiver_entity,
             main_receiver=main_receiver,
         )
 
@@ -63,16 +95,8 @@ async def async_setup_entry(
     # if entry.runtime_data is None:
     #     _LOGGER.info(STARTUP_MESSAGE)
 
-    denon_domain_data = DenonVideoSelectData._get_denon_domain_data(hass)
-    _LOGGER.debug(
-        "async_setup_entry entry: %s for denon_domain_data: %s with entry.data: %s",
-        entry,
-        denon_domain_data,
-        entry.data,
-    )
-
     # Assign the runtime_data
-    entry.runtime_data = DenonVideoSelectData.from_entry(entry)
+    entry.runtime_data = DenonVideoSelectData.from_entry(hass, entry)
 
     await async_setup_reload_service(hass, DOMAIN, PLATFORMS)
 

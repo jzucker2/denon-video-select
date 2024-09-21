@@ -16,6 +16,10 @@ class DenonVideoSelectEntity(Entity):
 
     @property
     def main_receiver_entity(self):
+        return self.runtime_data.main_receiver_entity
+
+    @property
+    def main_receiver(self):
         return self.runtime_data.main_receiver
 
     @property

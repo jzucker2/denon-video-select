@@ -31,6 +31,11 @@ class DenonVideoSelectSensor(DenonVideoSelectEntity):
         """Return the state of the sensor."""
         return "foo"
 
+    async def async_send_telnet_commands(self, *commands: str) -> None:
+        """Send telnet commands to the receiver."""
+        _LOGGER.debug("async_send_telnet_commands commands: %s", commands)
+        await self.main_receiver.async_send_telnet_commands(*commands)
+
     def _get_source(self, call_data):
         source = call_data.get(ATTR_INPUT_SOURCE)
         return source
@@ -38,6 +43,7 @@ class DenonVideoSelectSensor(DenonVideoSelectEntity):
     async def _async_select_video_source(self, input_source: str):
         await asyncio.sleep(0)
         _LOGGER.debug("_async_select_video_source input_source: %s", input_source)
+        await self.async_send_telnet_commands("SVAUX2")
 
     async def handle_select_video_source(self, call):
         """Handle the service action call."""
