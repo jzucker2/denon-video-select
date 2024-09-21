@@ -1,5 +1,6 @@
 """DenonVideoSelectEntity class"""
 
+from denonavr import DenonAVR
 from homeassistant.helpers.entity import Entity
 
 from .const import DOMAIN, NAME, VERSION
@@ -16,6 +17,10 @@ class DenonVideoSelectEntity(Entity):
 
     @property
     def main_receiver_entity(self):
+        return self.runtime_data.main_receiver_entity
+
+    @property
+    def main_receiver(self) -> DenonAVR:
         return self.runtime_data.main_receiver
 
     @property
