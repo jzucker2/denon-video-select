@@ -35,7 +35,7 @@ def bypass_setup_fixture():
 # Here we simulate a successful config flow from the backend.
 # Note that we use the `bypass_get_data` fixture here because
 # we want the config flow validation to succeed during the test.
-async def DISABLE_test_successful_config_flow(hass):
+async def test_successful_config_flow(hass):
     """Test a successful config flow."""
     # Initialize a config flow
     result = await hass.config_entries.flow.async_init(
@@ -64,7 +64,7 @@ async def DISABLE_test_successful_config_flow(hass):
 # We use the `error_on_get_data` mock instead of `bypass_get_data`
 # (note the function parameters) to raise an Exception during
 # validation of the input config.
-async def DISABLE_test_failed_config_flow(hass):
+async def test_failed_config_flow(hass):
     """Test a failed config flow due to credential validation failure."""
 
     result = await hass.config_entries.flow.async_init(
@@ -83,7 +83,7 @@ async def DISABLE_test_failed_config_flow(hass):
 
 
 # Our config flow also has an options flow, so we must test it as well.
-async def DISABLE_test_options_flow(hass):
+async def test_options_flow(hass):
     """Test an options flow."""
     # Create a new MockConfigEntry and add to HASS (we're bypassing config
     # flow entirely)
