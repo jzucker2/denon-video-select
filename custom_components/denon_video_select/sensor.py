@@ -40,10 +40,19 @@ class DenonVideoSelectSensor(DenonVideoSelectEntity):
         source = call_data.get(ATTR_INPUT_SOURCE)
         return source
 
+    def _get_final_video_select_command(self, input_option):
+        return f"SV{input_option}"
+
     async def _async_select_video_source(self, input_source: str):
         await asyncio.sleep(0)
-        _LOGGER.debug("_async_select_video_source input_source: %s", input_source)
-        await self.async_send_telnet_commands("SVAUX2")
+        final_command = self._get_final_video_select_command(input_source)
+        _LOGGER.debug(
+            "_async_select_video_source input_source: %s with final_command: %s",
+            input_source,
+            final_command,
+        )
+
+        await self.async_send_telnet_commands(final_command)
 
     async def handle_select_video_source(self, call):
         """Handle the service action call."""
