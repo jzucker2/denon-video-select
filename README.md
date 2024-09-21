@@ -98,3 +98,23 @@ Code template was mainly taken from [@Ludeeus](https://github.com/ludeeus)'s [in
 ## Notes
 
 - https://github.com/home-assistant/core/blob/dev/homeassistant/components/denonavr/media_player.py
+
+## Options
+
+```javascript
+const VideoSelectOptions = {
+  CD: "CD",
+  DVD: "DVD",
+  BD: "BD",
+  TV: "TV",
+  Sattalite: "SAT/CBL",
+  Cable: "SAT/CBL",
+  Game: "GAME",
+  Aux1: "AUX1",
+  Aux2: "AUX2",
+  MPlay: "MPLAY",
+  Cancel: "SOURCE",
+  Status: "?",
+  Base: "SV",
+};
+```
