@@ -7,8 +7,8 @@ https://github.com/jzucker2/denon-video-select
 
 from dataclasses import dataclass
 import logging
-from typing import Any
 
+from denonavr import DenonAVR
 from homeassistant.components.denonavr import CONF_RECEIVER, DOMAIN as DENON_DOMAIN
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_NAME
@@ -38,7 +38,7 @@ class MissingDenonConfigEntryException(DenonVideoSelectDataException):
 class DenonVideoSelectData:
     name: str
     main_receiver_entity: str
-    main_receiver: Any
+    main_receiver: DenonAVR
 
     @classmethod
     def _get_denon_domain_data(cls, hass):
@@ -59,7 +59,7 @@ class DenonVideoSelectData:
         return config_entry
 
     @classmethod
-    def _get_first_denon_receiver(cls, hass):
+    def _get_first_denon_receiver(cls, hass) -> DenonAVR:
         config_entry = cls._get_first_denon_config_entry(hass)
         receiver = config_entry[CONF_RECEIVER]
         _LOGGER.debug("receiver: %s", receiver)
