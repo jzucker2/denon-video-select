@@ -55,7 +55,7 @@ class DenonVideoSelectData:
             _LOGGER.error(e_m)
             raise MissingDenonConfigEntryException(e_m)
         _LOGGER.warning("type(denon_data): %s", type(denon_data))
-        only_entries = denon_data.values()
+        only_entries = list(denon_data.values())
         _LOGGER.warning("only_entries: %s", only_entries)
         config_entry = only_entries[0]
         _LOGGER.warning("config_entry: %s", config_entry)
