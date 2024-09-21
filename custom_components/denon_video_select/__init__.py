@@ -44,7 +44,7 @@ class DenonVideoSelectData:
     def _get_denon_domain_data(cls, hass):
         # TODO: maybe protect against no data?
         denon_domain_data = hass.data[DENON_DOMAIN]
-        _LOGGER.debug("denon_domain_data: %s", denon_domain_data)
+        _LOGGER.info("denon_domain_data: %s", denon_domain_data)
         return denon_domain_data
 
     @classmethod
@@ -54,16 +54,17 @@ class DenonVideoSelectData:
             e_m = "Missing denon data"
             _LOGGER.error(e_m)
             raise MissingDenonConfigEntryException(e_m)
+        _LOGGER.info("type(denon_data): %s", type(denon_data))
         only_entries = denon_data.values()
         config_entry = only_entries[0]
-        _LOGGER.debug("config_entry: %s", config_entry)
+        _LOGGER.info("config_entry: %s", config_entry)
         return config_entry
 
     @classmethod
     def _get_first_denon_receiver(cls, hass) -> DenonAVR:
         config_entry = cls._get_first_denon_config_entry(hass)
         receiver = config_entry[CONF_RECEIVER]
-        _LOGGER.debug("receiver: %s", receiver)
+        _LOGGER.info("receiver: %s", receiver)
         return receiver
 
     @classmethod
