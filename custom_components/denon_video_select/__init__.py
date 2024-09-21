@@ -54,7 +54,8 @@ class DenonVideoSelectData:
             e_m = "Missing denon data"
             _LOGGER.error(e_m)
             raise MissingDenonConfigEntryException(e_m)
-        config_entry = denon_data[0]
+        only_entries = denon_data.values()
+        config_entry = only_entries[0]
         _LOGGER.debug("config_entry: %s", config_entry)
         return config_entry
 
