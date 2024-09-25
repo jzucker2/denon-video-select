@@ -10,5 +10,5 @@
   "issue_tracker": "https://github.com/jzucker2/denon-video-select/issues",
   "loggers": ["denonavr"],
   "requirements": ["denonavr==1.0.0"],
-  "version": "0.7.5"
+  "version": "0.8.0"
 }
