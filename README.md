@@ -101,6 +101,8 @@ Code template was mainly taken from [@Ludeeus](https://github.com/ludeeus)'s [in
 
 ## Options
 
+Wanted to keep track of the available options.
+
 ```javascript
 const VideoSelectOptions = {
   CD: "CD",
