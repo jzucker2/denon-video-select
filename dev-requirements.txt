@@ -1,2 +1,2 @@
-denonavr==0.11.6
+denonavr==1.0.0
 homeassistant==2024.9.1
