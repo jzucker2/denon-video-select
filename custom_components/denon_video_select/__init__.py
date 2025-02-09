@@ -10,7 +10,6 @@ import logging
 
 from denonavr import DenonAVR
 from homeassistant.components.denonavr import (
-    CONF_RECEIVER,
     DOMAIN as DENON_DOMAIN,
     DenonavrConfigEntry,
 )
@@ -19,7 +18,7 @@ from homeassistant.core import Config, HomeAssistant
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.reload import async_setup_reload_service
 
-from .const import CONF_MAIN_RECEIVER, DOMAIN, PLATFORMS
+from .const import DOMAIN, PLATFORMS
 
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
@@ -64,7 +63,7 @@ class DenonVideoSelectData:
     @classmethod
     def _get_first_denon_receiver(cls, hass) -> DenonAVR:
         config_entry = cls._get_first_denon_config_entry(hass)
-        receiver = config_entry[CONF_RECEIVER]
+        receiver = config_entry["denon_config_entry"]
         _LOGGER.debug("receiver: %s", receiver)
         return receiver
 
@@ -74,7 +73,7 @@ class DenonVideoSelectData:
             "Processing data config entry: %s with entry.data: %s", entry, entry.data
         )
         name = entry.data.get(CONF_NAME)
-        main_receiver_entity = entry.data.get(CONF_MAIN_RECEIVER)
+        main_receiver_entity = entry.data.get("denon_config_entry")
 
         main_receiver = cls._get_first_denon_receiver(hass)
 
