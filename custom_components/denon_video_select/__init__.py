@@ -10,6 +10,7 @@ import logging
 
 from denonavr import DenonAVR
 from homeassistant.components.denonavr import DenonavrConfigEntry
+from homeassistant.components.denonavr.const import DOMAIN as DENON_DOMAIN
 from homeassistant.const import CONF_NAME
 from homeassistant.core import Config, HomeAssistant
 from homeassistant.helpers import config_validation as cv
@@ -37,30 +38,28 @@ class DenonVideoSelectData:
     main_receiver: DenonAVR
 
     @classmethod
-    def _get_denon_domain_data(cls, hass):
+    def _get_denon_domain_config_entries(cls, hass):
         # TODO: maybe protect against no data?
-        denon_domain_data = hass.data["denon_domain_key"]
-        _LOGGER.debug("denon_domain_data: %s", denon_domain_data)
-        return denon_domain_data
+        denon_entries = hass.config_entries.async_entries(DENON_DOMAIN)
+        _LOGGER.debug("denon_entries: %s", denon_entries)
+        return denon_entries
 
     @classmethod
     def _get_first_denon_config_entry(cls, hass):
-        denon_data = cls._get_denon_domain_data(hass)
-        if not denon_data:
+        denon_entries = cls._get_denon_domain_config_entries(hass)
+        if not denon_entries:
             e_m = "Missing denon data"
             _LOGGER.error(e_m)
             raise MissingDenonConfigEntryException(e_m)
-        _LOGGER.debug("type(denon_data): %s", type(denon_data))
-        only_entries = list(denon_data.values())
-        _LOGGER.debug("only_entries: %s", only_entries)
-        config_entry = only_entries[0]
+        _LOGGER.debug("type(denon_data): %s", type(denon_entries))
+        config_entry = denon_entries[0]
         _LOGGER.debug("config_entry: %s", config_entry)
         return config_entry
 
     @classmethod
     def _get_first_denon_receiver(cls, hass) -> DenonAVR:
         config_entry = cls._get_first_denon_config_entry(hass)
-        receiver = config_entry["denon_config_entry"]
+        receiver = config_entry.runtime_data
         _LOGGER.debug("receiver: %s", receiver)
         return receiver
 
@@ -70,7 +69,7 @@ class DenonVideoSelectData:
             "Processing data config entry: %s with entry.data: %s", entry, entry.data
         )
         name = entry.data.get(CONF_NAME)
-        main_receiver_entity = entry.data.get("denon_config_entry")
+        main_receiver_entity = entry.runtime_data
 
         main_receiver = cls._get_first_denon_receiver(hass)
 
