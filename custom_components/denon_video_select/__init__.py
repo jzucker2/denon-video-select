@@ -9,8 +9,8 @@ from dataclasses import dataclass
 import logging
 
 from denonavr import DenonAVR
-from homeassistant.components.denonavr import DenonavrConfigEntry
 from homeassistant.components.denonavr.const import DOMAIN as DENON_DOMAIN
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_NAME
 from homeassistant.core import Config, HomeAssistant
 from homeassistant.helpers import config_validation as cv
@@ -21,6 +21,9 @@ from .const import DOMAIN, PLATFORMS
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
+
+# The type alias needs to be suffixed with 'ConfigEntry'
+type DenonVideoSelectConfigEntry = ConfigEntry[DenonVideoSelectData]
 
 
 class DenonVideoSelectDataException(Exception):
@@ -64,7 +67,7 @@ class DenonVideoSelectData:
         return receiver
 
     @classmethod
-    def from_entry(cls, hass, entry: DenonavrConfigEntry):
+    def from_entry(cls, hass, entry: DenonVideoSelectConfigEntry):
         _LOGGER.debug(
             "Processing data config entry: %s with entry.data: %s", entry, entry.data
         )
@@ -87,7 +90,7 @@ async def async_setup(hass: HomeAssistant, config: Config):
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: DenonavrConfigEntry,
+    entry: DenonVideoSelectConfigEntry,
 ):
     """Set up this integration using UI."""
     # if entry.runtime_data is None:
@@ -109,7 +112,7 @@ async def async_setup_entry(
 
 async def async_unload_entry(
     hass: HomeAssistant,
-    entry: DenonavrConfigEntry,
+    entry: DenonVideoSelectConfigEntry,
 ) -> bool:
     """Handle removal of an entry."""
     if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
@@ -122,7 +125,7 @@ async def async_unload_entry(
 
 async def async_reload_entry(
     hass: HomeAssistant,
-    entry: DenonavrConfigEntry,
+    entry: DenonVideoSelectConfigEntry,
 ) -> None:
     """Reload config entry."""
     await hass.config_entries.async_reload(entry.entry_id)
