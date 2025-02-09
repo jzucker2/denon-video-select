@@ -9,21 +9,18 @@ from dataclasses import dataclass
 import logging
 
 from denonavr import DenonAVR
-from homeassistant.components.denonavr import CONF_RECEIVER, DOMAIN as DENON_DOMAIN
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.components.denonavr import DenonavrConfigEntry
+from homeassistant.components.denonavr.const import DOMAIN as DENON_DOMAIN
 from homeassistant.const import CONF_NAME
 from homeassistant.core import Config, HomeAssistant
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.reload import async_setup_reload_service
 
-from .const import CONF_MAIN_RECEIVER, DOMAIN, PLATFORMS
+from .const import DOMAIN, PLATFORMS
 
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
-
-# The type alias needs to be suffixed with 'ConfigEntry'
-type DenonVideoSelectConfigEntry = ConfigEntry[DenonVideoSelectData]
 
 
 class DenonVideoSelectDataException(Exception):
@@ -41,40 +38,38 @@ class DenonVideoSelectData:
     main_receiver: DenonAVR
 
     @classmethod
-    def _get_denon_domain_data(cls, hass):
+    def _get_denon_domain_config_entries(cls, hass):
         # TODO: maybe protect against no data?
-        denon_domain_data = hass.data[DENON_DOMAIN]
-        _LOGGER.debug("denon_domain_data: %s", denon_domain_data)
-        return denon_domain_data
+        denon_entries = hass.config_entries.async_entries(DENON_DOMAIN)
+        _LOGGER.debug("denon_entries: %s", denon_entries)
+        return denon_entries
 
     @classmethod
     def _get_first_denon_config_entry(cls, hass):
-        denon_data = cls._get_denon_domain_data(hass)
-        if not denon_data:
+        denon_entries = cls._get_denon_domain_config_entries(hass)
+        if not denon_entries:
             e_m = "Missing denon data"
             _LOGGER.error(e_m)
             raise MissingDenonConfigEntryException(e_m)
-        _LOGGER.debug("type(denon_data): %s", type(denon_data))
-        only_entries = list(denon_data.values())
-        _LOGGER.debug("only_entries: %s", only_entries)
-        config_entry = only_entries[0]
+        _LOGGER.debug("type(denon_data): %s", type(denon_entries))
+        config_entry = denon_entries[0]
         _LOGGER.debug("config_entry: %s", config_entry)
         return config_entry
 
     @classmethod
     def _get_first_denon_receiver(cls, hass) -> DenonAVR:
         config_entry = cls._get_first_denon_config_entry(hass)
-        receiver = config_entry[CONF_RECEIVER]
+        receiver = config_entry.runtime_data
         _LOGGER.debug("receiver: %s", receiver)
         return receiver
 
     @classmethod
-    def from_entry(cls, hass, entry: DenonVideoSelectConfigEntry):
+    def from_entry(cls, hass, entry: DenonavrConfigEntry):
         _LOGGER.debug(
             "Processing data config entry: %s with entry.data: %s", entry, entry.data
         )
         name = entry.data.get(CONF_NAME)
-        main_receiver_entity = entry.data.get(CONF_MAIN_RECEIVER)
+        main_receiver_entity = entry.runtime_data
 
         main_receiver = cls._get_first_denon_receiver(hass)
 
@@ -92,7 +87,7 @@ async def async_setup(hass: HomeAssistant, config: Config):
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: DenonVideoSelectConfigEntry,
+    entry: DenonavrConfigEntry,
 ):
     """Set up this integration using UI."""
     # if entry.runtime_data is None:
@@ -114,7 +109,7 @@ async def async_setup_entry(
 
 async def async_unload_entry(
     hass: HomeAssistant,
-    entry: DenonVideoSelectConfigEntry,
+    entry: DenonavrConfigEntry,
 ) -> bool:
     """Handle removal of an entry."""
     if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
@@ -127,7 +122,7 @@ async def async_unload_entry(
 
 async def async_reload_entry(
     hass: HomeAssistant,
-    entry: DenonVideoSelectConfigEntry,
+    entry: DenonavrConfigEntry,
 ) -> None:
     """Reload config entry."""
     await hass.config_entries.async_reload(entry.entry_id)
