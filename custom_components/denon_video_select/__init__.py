@@ -9,10 +9,7 @@ from dataclasses import dataclass
 import logging
 
 from denonavr import DenonAVR
-from homeassistant.components.denonavr import (
-    DOMAIN as DENON_DOMAIN,
-    DenonavrConfigEntry,
-)
+from homeassistant.components.denonavr import DenonavrConfigEntry
 from homeassistant.const import CONF_NAME
 from homeassistant.core import Config, HomeAssistant
 from homeassistant.helpers import config_validation as cv
@@ -42,7 +39,7 @@ class DenonVideoSelectData:
     @classmethod
     def _get_denon_domain_data(cls, hass):
         # TODO: maybe protect against no data?
-        denon_domain_data = hass.data[DENON_DOMAIN]
+        denon_domain_data = hass.data["denon_domain_key"]
         _LOGGER.debug("denon_domain_data: %s", denon_domain_data)
         return denon_domain_data
 
