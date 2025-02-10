@@ -16,7 +16,7 @@ from homeassistant.core import Config, HomeAssistant
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.reload import async_setup_reload_service
 
-from .const import DOMAIN, PLATFORMS
+from .const import CONF_MAIN_RECEIVER, DOMAIN, PLATFORMS
 
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
@@ -72,7 +72,7 @@ class DenonVideoSelectData:
             "Processing data config entry: %s with entry.data: %s", entry, entry.data
         )
         name = entry.data.get(CONF_NAME)
-        main_receiver_entity = entry.runtime_data
+        main_receiver_entity = entry.data.get(CONF_MAIN_RECEIVER)
 
         main_receiver = cls._get_first_denon_receiver(hass)
 
