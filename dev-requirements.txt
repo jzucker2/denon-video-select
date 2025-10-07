@@ -1,2 +1,2 @@
 denonavr==1.1.1
-homeassistant==2025.5.2
+homeassistant==2025.10.1
