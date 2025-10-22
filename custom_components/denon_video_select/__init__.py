@@ -12,7 +12,8 @@ from denonavr import DenonAVR
 from homeassistant.components.denonavr.const import DOMAIN as DENON_DOMAIN
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_NAME
-from homeassistant.core import Config, HomeAssistant
+from homeassistant.core import HomeAssistant
+from homeassistant.core_config import Config
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.reload import async_setup_reload_service
 
